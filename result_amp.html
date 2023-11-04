@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AMP Explorer and Toxicity Analyzer</title>
+        <link href="/static/css/common.css" rel="stylesheet">
+        <link href="/static/css/result.css" rel="stylesheet">
+        <script src="/static/js/common.js"></script>
+        <link rel="shortcut icon" href="/static/img/favicon.ico">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+
+    <body>
+        <div class="header">
+            <div class="vertical_middle_helper_div">
+                <span class="vertical_middle_helper"></span>
+                <img src="/static/img/logo left.svg" height="70" alt="logo" onclick="ToMainPage()" class="logo">
+                <img src="/static/img/logo right.svg" height="70" alt="logo" onclick="ToMainPage()" class="logo">
+                <img src="/static/img/sub logo.svg" height="50" alt="logo" onclick="ToMainPage()" class="logo" id="sub_logo">
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="body">
+                <div class="content_block">
+                    <h2>Result</h2>
+                    <table>
+                        <tr style="color: green;">
+                            <td>ID</td>
+                            <td>Sequence</td>
+                            <td>Strain</td>
+                            <td>Predictive Score</td>
+                            <td>Class</td>
+                        </tr>
+                        <tr>
+                            <td>{{result[0]}}</td>
+                            <td>
+                                {% for part in result[1] %}
+                                    <div>{{part}}</div>
+                                {% endfor %}
+                            </td>
+                            <td>{{result[2]}}</td>
+                            <td>{{result[3]}}</td>
+                            <td class="highlight">{{result[4]}}</td>
+                        </tr>
+                    </table>
+                    <h2>Amino Acid Composition</h2>
+                    <div class="chart_wrapper">
+                        <canvas id="myChart"></canvas>
+                        <script>
+                            var ctx = document.getElementById('myChart');
+                            var myChart = new Chart(ctx, {
+                              type: 'bar',
+                              options: {
+                                scales: {
+                                  y: {
+                                    title: {
+                                      display: true,
+                                      text: '%'
+                                    }
+                                  }
+                                },
+                                plugins: {
+                                  legend: {
+                                    display: false
+                                  }
+                                }
+                              },
+                              data: {
+                                labels: ['R', 'H', 'K', 'D', 'E',
+                                 'S', 'T', 'N', 'Q', 'C',
+                                  'G', 'P', 'A', 'V', 'I',
+                                   'L', 'M', 'F', 'Y', 'W'],
+                                datasets: [{
+                                  backgroundColor: [
+                                    'rgba(20, 90, 255, 0.4)',
+                                    'rgba(130, 130, 210, 0.4)',
+                                    'rgba(20, 90, 255, 0.4)',
+                                    'rgba(230, 10, 10, 0.4)',
+                                    'rgba(230, 10, 10, 0.4)',
+
+                                    'rgba(250, 150, 0, 0.4)',
+                                    'rgba(250, 150, 0, 0.4)',
+                                    'rgba(0, 220, 220, 0.4)',
+                                    'rgba(0, 220, 220, 0.4)',
+                                    'rgba(230, 230, 0, 0.4)',
+
+                                    'rgba(235, 235, 235, 0.4)',
+                                    'rgba(220, 150, 130, 0.4)',
+                                    'rgba(200 ,200, 200, 0.4)',
+                                    'rgba(15, 130, 15, 0.4)',
+                                    'rgba(15, 130, 15, 0.4)',
+
+                                    'rgba(15, 130, 15, 0.4)',
+                                    'rgba(230, 230, 0, 0.4)',
+                                    'rgba(50, 50, 170, 0.4)',
+                                    'rgba(50, 50, 170, 0.4)',
+                                    'rgba(180, 90, 180, 0.4)',
+                                  ],
+                                  borderColor: [
+                                    'rgba(20, 90, 255, 1)',
+                                    'rgba(130, 130, 210, 1)',
+                                    'rgba(20, 90, 255, 1)',
+                                    'rgba(230, 10, 10, 1)',
+                                    'rgba(230, 10, 10, 1)',
+
+                                    'rgba(250, 150, 0, 1)',
+                                    'rgba(250, 150, 0, 1)',
+                                    'rgba(0, 220, 220, 1)',
+                                    'rgba(0, 220, 220, 1)',
+                                    'rgba(230, 230, 0, 1)',
+
+                                    'rgba(235, 235, 235, 1)',
+                                    'rgba(220, 150, 130, 1)',
+                                    'rgba(200 ,200, 200, 1)',
+                                    'rgba(15, 130, 15, 1)',
+                                    'rgba(15, 130, 15, 1)',
+
+                                    'rgba(15, 130, 15, 1)',
+                                    'rgba(230, 230, 0, 1)',
+                                    'rgba(50, 50, 170, 1)',
+                                    'rgba(50, 50, 170, 1)',
+                                    'rgba(180, 90, 180, 1)',
+                                  ],
+                                  borderWidth: 1,
+                                  label: 'data',
+                                  data: {{composition|safe}}
+                                }]
+                              }
+                            });
+                        </script>
+                    </div>
+                    <h2>Peptide Physicochemical Properties</h2>
+                    <table>
+                        <tr style="color: green;">
+                            {% for element in pc_title %}
+                                <td>{{element}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            {% for element in pc %}
+                                <td>{{element}}</td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </div>
+                <button onclick="ToMainPage()">⏴Back</button>
+            </div>
+        </div>
+        <div class="footer">
+              <a class="footer_text">Contact us:</a>
+              <a class="footer_link" href="mailto:hhgavintsai@gmail.com">hhgavintsai@gmail.com</a>
+        </div>
+    </body>
+</html>
